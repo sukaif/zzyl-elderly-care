@@ -75,6 +75,9 @@ doc.add_paragraph(
 doc.add_paragraph(
     '微信小程序：供入住老人及家属使用，功能包括微信登录、预约参观、查看老人健康数据、在线缴费等。'
 )
+doc.add_paragraph(
+    '注：微信小程序代码在微信开发者工具中独立管理和维护，本仓库仅包含后端服务接口和管理后台前端代码。'
+)
 
 doc.add_paragraph('技术架构：')
 techs = [
