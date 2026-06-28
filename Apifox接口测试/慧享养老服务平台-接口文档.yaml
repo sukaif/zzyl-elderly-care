@@ -1,10 +1,10 @@
 openapi: 3.0.0
 info:
-  title: 中州养老管理系统 API
+  title: 慧享养老服务平台 API
   description: 基于Spring Boot + RuoYi框架的养老服务管理平台接口文档
   version: 1.0.0
   contact:
-    name: 中州养老开发团队
+    name: 慧享养老开发团队
 
 servers:
   - url: http://localhost:8080

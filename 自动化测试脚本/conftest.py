@@ -1,5 +1,5 @@
 """
-中州养老管理系统 - Selenium自动化测试配置
+慧享养老服务平台 - Selenium自动化测试配置
 """
 import pytest
 import os

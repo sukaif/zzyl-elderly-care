@@ -1,5 +1,5 @@
 """
-生成《中州养老管理系统 - 项目总结》优化版DOCX
+生成《慧享养老服务平台 - 项目总结》优化版DOCX
 基于原始文档重新整理，补充测试视角的内容
 """
 from docx import Document
@@ -41,7 +41,7 @@ for _ in range(4):
 
 title = doc.add_paragraph()
 title.alignment = WD_ALIGN_PARAGRAPH.CENTER
-run = title.add_run('中州养老管理系统')
+run = title.add_run('慧享养老服务平台')
 run.font.size = Pt(28)
 run.bold = True
 run.font.color.rgb = RGBColor(0, 51, 102)
@@ -66,7 +66,7 @@ doc.add_page_break()
 add_heading_styled('一、项目概述', level=1)
 
 doc.add_paragraph(
-    '中州养老管理系统是专门为养老机构定制开发的一套专业养老服务管理平台，系统分为两部分：后台管理系统和微信小程序。'
+    '慧享养老服务平台是专门为养老机构定制开发的一套专业养老服务管理平台，系统分为两部分：后台管理系统和微信小程序。'
 )
 doc.add_paragraph(
     '后台管理系统：供养老院员工使用，主要包含老人入住管理、退住管理、护理管理、床位管理、智能监测等核心模块，'
@@ -201,14 +201,14 @@ for k, v in stats:
 
 doc.add_paragraph()
 doc.add_paragraph(
-    '通过系统的测试工作，确保了中州养老管理系统v1.0版本的顺利上线，上线后系统运行稳定，'
+    '通过系统的测试工作，确保了慧享养老服务平台v1.0版本的顺利上线，上线后系统运行稳定，'
     '核心功能无P0/P1级别线上缺陷，获得了客户的好评。'
 )
 
 # ========== 六、个人总结 ==========
 add_heading_styled('六、个人总结与收获', level=1)
 doc.add_paragraph(
-    '通过参与中州养老管理系统项目，我全面实践了软件测试的全流程，从需求评审、测试计划、'
+    '通过参与慧享养老服务平台项目，我全面实践了软件测试的全流程，从需求评审、测试计划、'
     '用例设计到测试执行、缺陷管理和测试报告输出，积累了完整的项目测试经验。'
 )
 doc.add_paragraph('主要收获：')
@@ -223,6 +223,6 @@ for g in gains:
     doc.add_paragraph(g, style='List Bullet')
 
 # 保存
-output_path = "C:/Users/ASUS/Desktop/生产实习/zyyl/中州养老管理系统-项目总结.docx"
+output_path = "C:/Users/ASUS/Desktop/生产实习/zyyl/慧享养老服务平台-项目总结.docx"
 doc.save(output_path)
 print(f"项目总结已生成: {output_path}")

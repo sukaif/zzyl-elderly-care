@@ -8,9 +8,9 @@
     <artifactId>zzyl</artifactId>
     <version>3.9.2</version>
 
-    <name>中州养老管理系统</name>
+    <name>慧享养老服务平台</name>
     <url>http://www.ruoyi.vip</url>
-    <description>中州养老管理系统 - 基于若依框架的养老服务管理平台</description>
+    <description>慧享养老服务平台 - 基于若依框架的养老服务管理平台</description>
     
     <properties>
         <com.zzyl.version>3.9.2</com.zzyl.version>

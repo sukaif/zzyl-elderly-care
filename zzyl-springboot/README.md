@@ -1,7 +1,7 @@
 <p align="center">
     <img alt="logo" src="https://oscimg.oschina.net/oscnet/up-d3d0a9303e11d522a06cd263f3079027715.png">
 </p>
-<h1 align="center" style="margin: 30px 0 30px; font-weight: bold;">中州养老管理系统</h1>
+<h1 align="center" style="margin: 30px 0 30px; font-weight: bold;">慧享养老服务平台</h1>
 <h4 align="center">基于SpringBoot+Vue前后端分离的养老服务管理平台</h4>
 <p align="center">
     <a href="#"><img src="https://img.shields.io/badge/Spring%20Boot-3.5.14-brightgreen.svg"></a>
@@ -11,7 +11,7 @@
 
 ## 📋 项目简介
 
-中州养老管理系统是基于若依框架（RuoYi-Vue）二次开发的养老服务管理平台，为养老机构提供全面的信息化管理解决方案。
+慧享养老服务平台是基于若依框架（RuoYi-Vue）二次开发的养老服务管理平台，为养老机构提供全面的信息化管理解决方案。
 
 - 后端采用 Spring Boot 3.5.x、Spring Security、Redis & Jwt
 - 前端采用 Vue 2.x、Element UI、Vuex、Vue Router
@@ -158,11 +158,11 @@ zzyl-springboot/
 │   ├── test_api.py
 │   └── requirements.txt
 ├── Apifox接口测试/           # 🆕 API接口文档
-│   └── 中州养老管理系统-接口文档.yaml
+│   └── 慧享养老服务平台-接口文档.yaml
 ├── 测试用例设计/              # 🆕 测试用例文档
-├── 中州养老管理系统-测试全流程操作手册.docx  # 🆕 测试操作手册
-├── 中州养老管理系统-项目总结.docx           # 🆕 项目总结
-├── 中州养老管理系统-面试题集.docx           # 🆕 面试题集
+├── 慧享养老服务平台-测试全流程操作手册.docx  # 🆕 测试操作手册
+├── 慧享养老服务平台-项目总结.docx           # 🆕 项目总结
+├── 慧享养老服务平台-面试题集.docx           # 🆕 面试题集
 ├── 苏凯峰-软件测试工程师简历.docx            # 🆕 个人简历
 └── doc/                     # 文档目录
 ```

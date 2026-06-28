@@ -1,5 +1,5 @@
 """
-生成《中州养老管理系统 - 测试面试题集》DOCX
+生成《慧享养老服务平台 - 测试面试题集》DOCX
 """
 from docx import Document
 from docx.shared import Pt, Cm, RGBColor
@@ -39,7 +39,7 @@ for _ in range(4):
 
 title = doc.add_paragraph()
 title.alignment = WD_ALIGN_PARAGRAPH.CENTER
-run = title.add_run('中州养老管理系统')
+run = title.add_run('慧享养老服务平台')
 run.font.size = Pt(28)
 run.bold = True
 run.font.color.rgb = RGBColor(0, 51, 102)
@@ -53,7 +53,7 @@ run.font.color.rgb = RGBColor(0, 102, 153)
 doc.add_paragraph()
 info = doc.add_paragraph()
 info.alignment = WD_ALIGN_PARAGRAPH.CENTER
-run = info.add_run('基于中州养老管理系统项目的面试题及答案\n涵盖：项目经验 / 测试理论 / 工具实战 / 技术深度')
+run = info.add_run('基于慧享养老服务平台项目的面试题及答案\n涵盖：项目经验 / 测试理论 / 工具实战 / 技术深度')
 run.font.size = Pt(12)
 run.font.color.rgb = RGBColor(102, 102, 102)
 
@@ -65,7 +65,7 @@ add_q('一、项目经验类', level=1)
 
 add_q('1. 请介绍一下你最近做的项目')
 doc.add_paragraph(
-    '我最近参与的是中州养老管理系统，这是一个专门为养老机构定制开发的养老服务管理平台。'
+    '我最近参与的是慧享养老服务平台，这是一个专门为养老机构定制开发的养老服务管理平台。'
     '系统分为后台管理系统和微信小程序两部分。\n\n'
     '后台管理系统供养老院员工使用，主要包含入住管理、退住管理、护理管理（护理等级、护理计划、护理项目）、'
     '床位管理（楼层、房间、床位）、智能监测（设备管理、告警规则、告警数据）等核心模块。\n\n'
@@ -333,7 +333,7 @@ doc.add_paragraph(
 
 add_q('20. Redis在项目中怎么用的？')
 doc.add_paragraph(
-    '在中州养老系统中，Redis的应用场景：\n'
+    '在慧享养老系统中，Redis的应用场景：\n'
     '1）缓存：缓存高频查询数据（用户信息、护理等级、床位状态），减少数据库压力\n'
     '2）缓存一致性策略：写操作时删除缓存，下次查询重新加载\n'
     '3）验证码：临时存储验证码，设置过期时间\n'
@@ -344,6 +344,6 @@ doc.add_paragraph(
 )
 
 # 保存
-output_path = "C:/Users/ASUS/Desktop/生产实习/zyyl/中州养老管理系统-面试题集.docx"
+output_path = "C:/Users/ASUS/Desktop/生产实习/zyyl/慧享养老服务平台-面试题集.docx"
 doc.save(output_path)
 print(f"面试题集已生成: {output_path}")

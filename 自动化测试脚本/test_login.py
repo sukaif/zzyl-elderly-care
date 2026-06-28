@@ -1,5 +1,5 @@
 """
-中州养老管理系统 - 登录模块自动化测试
+慧享养老服务平台 - 登录模块自动化测试
 """
 import pytest
 import time
@@ -38,7 +38,7 @@ class TestLogin:
         # 验证：等待首页加载，检查是否显示系统名称
         try:
             WebDriverWait(driver, 10).until(
-                EC.presence_of_element_located((By.XPATH, "//div[contains(text(), '中州养老')]"))
+                EC.presence_of_element_located((By.XPATH, "//div[contains(text(), '慧享养老')]"))
             )
             print("[PASS] 登录成功 - 页面跳转到系统首页")
             assert True

@@ -73,7 +73,7 @@ add_section_heading('项目经验')
 
 # 项目1
 p = doc.add_paragraph()
-run = p.add_run('中州养老管理系统')
+run = p.add_run('慧享养老服务平台')
 run.bold = True
 run.font.size = Pt(13)
 p.add_run('　　2024.02 - 2024.07')
@@ -81,7 +81,7 @@ run = p.runs[-1]
 run.font.color.rgb = RGBColor(102, 102, 102)
 
 doc.add_paragraph(
-    '项目描述：中州养老管理系统是专为养老机构定制开发的专业养老服务管理平台，系统分为后台管理系统和微信小程序两部分。'
+    '项目描述：慧享养老服务平台是专为养老机构定制开发的专业养老服务管理平台，系统分为后台管理系统和微信小程序两部分。'
     '后台管理系统供养老院员工使用，主要包含入住管理、退住管理、护理管理、床位管理、智能监测等核心模块；'
     '微信小程序供老人及家属使用，实现微信登录、预约参观、健康数据查看等功能。'
     '后端使用Spring Boot + MyBatis + Redis，前端使用Vue3 + Element Plus，集成百度千帆大模型做AI体检报告分析。'

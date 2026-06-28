@@ -11,7 +11,7 @@
 
     <artifactId>zzyl-oss</artifactId>
     <name>zzyl-oss</name>
-    <description>中州养老OSS模块</description>
+    <description>慧享养老OSS模块</description>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
