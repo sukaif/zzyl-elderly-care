@@ -1,0 +1,66 @@
+# ===================
+# Java / Maven
+# ===================
+target/
+*.class
+*.jar
+*.war
+*.ear
+!.mvn/wrapper/maven-wrapper.jar
+
+# ===================
+# IDE
+# ===================
+.idea/
+*.iml
+*.ipr
+*.iws
+.settings/
+.project
+.classpath
+.factorypath
+.springBeans
+.vscode/
+*.swp
+*.swo
+
+# ===================
+# Node / Vue
+# ===================
+node_modules/
+dist/
+*.local
+.ruoyi-ui/
+
+# ===================
+# Logs
+# ===================
+*.log
+logs/
+
+# ===================
+# Python / Automation Tests
+# ===================
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+*.egg
+.env
+venv/
+.env.local
+.pytest_cache/
+screenshots/
+reports/*.html
+
+# ===================
+# OS
+# ===================
+.DS_Store
+Thumbs.db
+
+# ===================
+# Project specific
+# ===================
+zzyl-springboot/logs/
+zzyl-springboot/target/

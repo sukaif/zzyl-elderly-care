@@ -1,0 +1,16 @@
+import pymysql
+db = pymysql.connect(host='localhost', user='root', password='123', database='zzyl', charset='utf8mb4')
+cursor = db.cursor()
+cursor.execute("ALTER TABLE health_assessment ADD COLUMN health_score DECIMAL(5,1) DEFAULT NULL COMMENT '健康评分(分)' AFTER assessment_date")
+cursor.execute("ALTER TABLE health_assessment ADD COLUMN suggest_admission VARCHAR(20) DEFAULT NULL COMMENT '建议入住' AFTER health_score")
+cursor.execute("ALTER TABLE health_assessment ADD COLUMN recommend_nursing_level VARCHAR(50) DEFAULT NULL COMMENT '推荐护理等级' AFTER suggest_admission")
+cursor.execute("ALTER TABLE health_assessment ADD COLUMN admission_status VARCHAR(20) DEFAULT NULL COMMENT '入住情况' AFTER recommend_nursing_level")
+cursor.execute("ALTER TABLE health_assessment ADD COLUMN examination_date DATE DEFAULT NULL COMMENT '总检日期' AFTER admission_status")
+cursor.execute("ALTER TABLE health_assessment ADD COLUMN assessment_time DATETIME DEFAULT NULL COMMENT '评估时间' AFTER examination_date")
+db.commit()
+print("表结构修改成功")
+cursor.execute("DESCRIBE health_assessment")
+result = cursor.fetchall()
+for row in result:
+    print(row)
+db.close()

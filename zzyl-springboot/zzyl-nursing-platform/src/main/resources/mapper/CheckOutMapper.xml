@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzyl.nursing.mapper.CheckOutMapper">
+
+    <resultMap type="CheckOut" id="CheckOutResult">
+        <result property="id"              column="id" />
+        <result property="checkInId"       column="check_in_id" />
+        <result property="elderId"         column="elder_id" />
+        <result property="checkoutType"    column="checkout_type" />
+        <result property="checkoutDate"    column="checkout_date" />
+        <result property="actualLeaveDate" column="actual_leave_date" />
+        <result property="reason"          column="reason" />
+        <result property="totalCharged"    column="total_charged" />
+        <result property="totalDeducted"   column="total_deducted" />
+        <result property="refundAmount"    column="refund_amount" />
+        <result property="arrears"         column="arrears" />
+        <result property="status"          column="status" />
+        <result property="remark"          column="remark" />
+        <result property="createTime"      column="create_time" />
+        <result property="updateTime"      column="update_time" />
+        <result property="createBy"        column="create_by" />
+        <result property="updateBy"        column="update_by" />
+    </resultMap>
+
+    <resultMap type="CheckOut" id="CheckOutListVoResult" extends="CheckOutResult">
+        <result property="elderName"  column="elder_name" />
+        <result property="idCardNo"   column="id_card_no" />
+        <result property="phone"      column="phone" />
+        <result property="bedNumber"  column="bed_number" />
+        <result property="roomNumber" column="room_number" />
+        <result property="floorName"  column="floor_name" />
+    </resultMap>
+
+    <sql id="selectCheckOutVo">
+        select id, check_in_id, elder_id, checkout_type, checkout_date,
+               actual_leave_date, reason, total_charged, total_deducted,
+               refund_amount, arrears, status, remark,
+               create_time, update_time, create_by, update_by
+        from check_out
+    </sql>
+
+    <select id="selectCheckOutList" parameterType="CheckOut" resultMap="CheckOutListVoResult">
+        select
+            co.id, co.check_in_id, co.elder_id, co.checkout_type,
+            co.checkout_date, co.actual_leave_date, co.reason,
+            co.total_charged, co.total_deducted, co.refund_amount,
+            co.arrears, co.status,
+            e.name as elder_name,
+            e.id_card_no,
+            e.phone,
+            b.bed_number,
+            r.room_number,
+            f.name as floor_name
+        from check_out co
+        left join elder e on co.elder_id = e.id
+        left join check_in ci on co.check_in_id = ci.id
+        left join check_in_cost cic on ci.id = cic.check_in_id
+        left join bed b on cic.bed_id = b.id
+        left join room r on b.room_id = r.id
+        left join floor f on r.floor_id = f.id
+        <where>
+            <if test="elderName != null and elderName != ''"> and e.name like concat('%', #{elderName}, '%')</if>
+            <if test="status != null and status != ''"> and co.status = #{status}</if>
+            <if test="checkoutType != null and checkoutType != ''"> and co.checkout_type = #{checkoutType}</if>
+        </where>
+        order by co.create_time desc
+    </select>
+
+    <select id="selectCheckOutById" parameterType="Long" resultMap="CheckOutListVoResult">
+        select
+            co.id, co.check_in_id, co.elder_id, co.checkout_type,
+            co.checkout_date, co.actual_leave_date, co.reason,
+            co.total_charged, co.total_deducted, co.refund_amount,
+            co.arrears, co.status,
+            e.name as elder_name,
+            e.id_card_no,
+            e.phone,
+            b.bed_number,
+            r.room_number,
+            f.name as floor_name
+        from check_out co
+        left join elder e on co.elder_id = e.id
+        left join check_in ci on co.check_in_id = ci.id
+        left join check_in_cost cic on ci.id = cic.check_in_id
+        left join bed b on cic.bed_id = b.id
+        left join room r on b.room_id = r.id
+        left join floor f on r.floor_id = f.id
+        where co.id = #{id}
+    </select>
+
+    <insert id="insertCheckOut" parameterType="CheckOut" useGeneratedKeys="true" keyProperty="id">
+        insert into check_out
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="checkInId != null">check_in_id,</if>
+            <if test="elderId != null">elder_id,</if>
+            <if test="checkoutType != null">checkout_type,</if>
+            <if test="checkoutDate != null">checkout_date,</if>
+            <if test="actualLeaveDate != null">actual_leave_date,</if>
+            <if test="reason != null">reason,</if>
+            <if test="totalCharged != null">total_charged,</if>
+            <if test="totalDeducted != null">total_deducted,</if>
+            <if test="refundAmount != null">refund_amount,</if>
+            <if test="arrears != null">arrears,</if>
+            <if test="status != null">status,</if>
+            <if test="remark != null">remark,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="updateBy != null">update_by,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="checkInId != null">#{checkInId},</if>
+            <if test="elderId != null">#{elderId},</if>
+            <if test="checkoutType != null">#{checkoutType},</if>
+            <if test="checkoutDate != null">#{checkoutDate},</if>
+            <if test="actualLeaveDate != null">#{actualLeaveDate},</if>
+            <if test="reason != null">#{reason},</if>
+            <if test="totalCharged != null">#{totalCharged},</if>
+            <if test="totalDeducted != null">#{totalDeducted},</if>
+            <if test="refundAmount != null">#{refundAmount},</if>
+            <if test="arrears != null">#{arrears},</if>
+            <if test="status != null">#{status},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+        </trim>
+    </insert>
+
+    <update id="updateCheckOut" parameterType="CheckOut">
+        update check_out
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="checkInId != null">check_in_id = #{checkInId},</if>
+            <if test="elderId != null">elder_id = #{elderId},</if>
+            <if test="checkoutType != null">checkout_type = #{checkoutType},</if>
+            <if test="checkoutDate != null">checkout_date = #{checkoutDate},</if>
+            <if test="actualLeaveDate != null">actual_leave_date = #{actualLeaveDate},</if>
+            <if test="reason != null">reason = #{reason},</if>
+            <if test="totalCharged != null">total_charged = #{totalCharged},</if>
+            <if test="totalDeducted != null">total_deducted = #{totalDeducted},</if>
+            <if test="refundAmount != null">refund_amount = #{refundAmount},</if>
+            <if test="arrears != null">arrears = #{arrears},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCheckOutById" parameterType="Long">
+        delete from check_out where id = #{id}
+    </delete>
+
+    <delete id="deleteCheckOutByIds" parameterType="String">
+        delete from check_out where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

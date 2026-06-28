@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzyl.nursing.mapper.BedMapper">
+
+    <resultMap type="Bed" id="BedResult">
+        <result property="id"        column="id" />
+        <result property="roomId"    column="room_id" />
+        <result property="bedNumber" column="bed_number" />
+        <result property="status"    column="status" />
+        <result property="price"     column="price" />
+        <result property="sortOrder" column="sort_order" />
+        <result property="remark"    column="remark" />
+        <result property="createTime" column="create_time" />
+        <result property="updateTime" column="update_time" />
+        <result property="createBy"   column="create_by" />
+        <result property="updateBy"   column="update_by" />
+    </resultMap>
+
+    <sql id="selectBedVo">
+        select id, room_id, bed_number, status, price, sort_order,
+               remark, create_time, update_time, create_by, update_by
+        from bed
+    </sql>
+
+    <select id="selectBedList" parameterType="Bed" resultMap="BedResult">
+        <include refid="selectBedVo"/>
+        <where>
+            <if test="roomId != null"> and room_id = #{roomId}</if>
+            <if test="status != null and status != ''"> and status = #{status}</if>
+            <if test="bedNumber != null and bedNumber != ''"> and bed_number like concat('%', #{bedNumber}, '%')</if>
+        </where>
+        order by sort_order
+    </select>
+
+    <select id="selectBedById" parameterType="Long" resultMap="BedResult">
+        <include refid="selectBedVo"/>
+        where id = #{id}
+    </select>
+
+    <select id="selectBedListByStatus" parameterType="String" resultMap="BedResult">
+        <include refid="selectBedVo"/>
+        where status = #{status}
+        order by sort_order
+    </select>
+
+    <insert id="insertBed" parameterType="Bed" useGeneratedKeys="true" keyProperty="id">
+        insert into bed
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="roomId != null">room_id,</if>
+            <if test="bedNumber != null and bedNumber != ''">bed_number,</if>
+            <if test="status != null">status,</if>
+            <if test="price != null">price,</if>
+            <if test="sortOrder != null">sort_order,</if>
+            <if test="remark != null">remark,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="updateBy != null">update_by,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="roomId != null">#{roomId},</if>
+            <if test="bedNumber != null and bedNumber != ''">#{bedNumber},</if>
+            <if test="status != null">#{status},</if>
+            <if test="price != null">#{price},</if>
+            <if test="sortOrder != null">#{sortOrder},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+        </trim>
+    </insert>
+
+    <update id="updateBed" parameterType="Bed">
+        update bed
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="roomId != null">room_id = #{roomId},</if>
+            <if test="bedNumber != null">bed_number = #{bedNumber},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="price != null">price = #{price},</if>
+            <if test="sortOrder != null">sort_order = #{sortOrder},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <update id="updateBedStatus">
+        update bed set status = #{status}
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBedById" parameterType="Long">
+        delete from bed where id = #{id}
+    </delete>
+
+    <delete id="deleteBedByIds" parameterType="String">
+        delete from bed where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

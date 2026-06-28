@@ -1,0 +1,400 @@
+openapi: 3.0.0
+info:
+  title: 中州养老管理系统 API
+  description: 基于Spring Boot + RuoYi框架的养老服务管理平台接口文档
+  version: 1.0.0
+  contact:
+    name: 中州养老开发团队
+
+servers:
+  - url: http://localhost:8080
+    description: 开发环境
+  - url: https://api.zzyl.com
+    description: 生产环境
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+security:
+  - BearerAuth: []
+
+paths:
+  # ====== 认证模块 ======
+  /login:
+    post:
+      tags:
+        - 认证管理
+      summary: 用户登录
+      description: 使用用户名密码登录系统
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - username
+                - password
+                - code
+                - uuid
+              properties:
+                username:
+                  type: string
+                  description: 用户名
+                  example: admin
+                password:
+                  type: string
+                  description: 密码（建议MD5加密传输）
+                  example: admin123
+                code:
+                  type: string
+                  description: 验证码
+                  example: "1"
+                uuid:
+                  type: string
+                  description: 验证码唯一标识
+                  example: captcha-uuid
+      responses:
+        '200':
+          description: 登录成功
+          content:
+            application/json:
+              example:
+                code: 200
+                msg: "操作成功"
+                token: "eyJhbGciOiJIUzUxMiJ9..."
+        '401':
+          description: 登录失败
+
+  /logout:
+    post:
+      tags:
+        - 认证管理
+      summary: 退出登录
+      responses:
+        '200':
+          description: 退出成功
+
+  /getInfo:
+    get:
+      tags:
+        - 认证管理
+      summary: 获取当前用户信息
+      responses:
+        '200':
+          description: 成功返回用户信息
+
+  /getRouters:
+    get:
+      tags:
+        - 认证管理
+      summary: 获取用户路由菜单
+      responses:
+        '200':
+          description: 返回菜单路由树
+
+  # ====== 用户管理 ======
+  /system/user/list:
+    get:
+      tags:
+        - 用户管理
+      summary: 获取用户列表（分页）
+      parameters:
+        - name: pageNum
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: pageSize
+          in: query
+          schema:
+            type: integer
+            default: 10
+        - name: userName
+          in: query
+          schema:
+            type: string
+        - name: status
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 返回用户列表
+
+  /system/user:
+    post:
+      tags:
+        - 用户管理
+      summary: 新增用户
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userName:
+                  type: string
+                nickName:
+                  type: string
+                password:
+                  type: string
+                phonenumber:
+                  type: string
+                email:
+                  type: string
+                sex:
+                  type: string
+                status:
+                  type: string
+                roleIds:
+                  type: array
+                  items:
+                    type: integer
+      responses:
+        '200':
+          description: 新增成功
+
+    put:
+      tags:
+        - 用户管理
+      summary: 修改用户
+      responses:
+        '200':
+          description: 修改成功
+
+    delete:
+      tags:
+        - 用户管理
+      summary: 删除用户
+      parameters:
+        - name: userIds
+          in: path
+          required: true
+          schema:
+            type: array
+            items:
+              type: integer
+      responses:
+        '200':
+          description: 删除成功
+
+  # ====== 角色管理 ======
+  /system/role/list:
+    get:
+      tags:
+        - 角色管理
+      summary: 获取角色列表
+      responses:
+        '200':
+          description: 返回角色列表
+
+  # ====== 菜单管理 ======
+  /system/menu/treeselect:
+    get:
+      tags:
+        - 菜单管理
+      summary: 获取菜单树
+      responses:
+        '200':
+          description: 返回菜单树
+
+  # ====== 入住管理 ======
+  /nursing/checkIn/list:
+    get:
+      tags:
+        - 入住管理
+      summary: 入住列表查询
+      responses:
+        '200':
+          description: 返回入住列表
+
+  /nursing/checkIn:
+    post:
+      tags:
+        - 入住管理
+      summary: 新增入住登记
+      responses:
+        '200':
+          description: 新增成功
+
+  /nursing/checkIn/{id}:
+    get:
+      tags:
+        - 入住管理
+      summary: 查询入住详情
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 返回入住详情
+
+    put:
+      tags:
+        - 入住管理
+      summary: 更新入住信息
+      responses:
+        '200':
+          description: 更新成功
+
+    delete:
+      tags:
+        - 入住管理
+      summary: 删除入住记录
+      responses:
+        '200':
+          description: 删除成功
+
+  # ====== 护理管理 ======
+  /nursing/project/list:
+    get:
+      tags:
+        - 护理管理
+      summary: 护理项目列表
+      responses:
+        '200':
+          description: 返回护理项目列表
+
+  /nursing/level/list:
+    get:
+      tags:
+        - 护理管理
+      summary: 护理等级列表
+      responses:
+        '200':
+          description: 返回护理等级列表
+
+  /nursing/plan/list:
+    get:
+      tags:
+        - 护理管理
+      summary: 护理计划列表
+      responses:
+        '200':
+          description: 返回护理计划列表
+
+  # ====== 床位管理 ======
+  /nursing/floor/list:
+    get:
+      tags:
+        - 床位管理
+      summary: 楼层列表
+      responses:
+        '200':
+          description: 返回楼层列表
+
+  /nursing/room/list:
+    get:
+      tags:
+        - 床位管理
+      summary: 房间列表
+      responses:
+        '200':
+          description: 返回房间列表
+
+  /nursing/bed/list:
+    get:
+      tags:
+        - 床位管理
+      summary: 床位列表
+      responses:
+        '200':
+          description: 返回床位列表
+
+  # ====== 监测管理 ======
+  /nursing/monitor/alert/list:
+    get:
+      tags:
+        - 监测管理
+      summary: 告警列表
+      responses:
+        '200':
+          description: 返回告警列表
+
+  /nursing/monitor/data/list:
+    get:
+      tags:
+        - 监测管理
+      summary: 监测数据列表
+      responses:
+        '200':
+          description: 返回监测数据
+
+  # ====== 测试管理 ======
+  /test/case/list:
+    get:
+      tags:
+        - 测试管理
+      summary: 测试用例列表
+      parameters:
+        - name: pageNum
+          in: query
+          schema:
+            type: integer
+        - name: pageSize
+          in: query
+          schema:
+            type: integer
+        - name: caseName
+          in: query
+          schema:
+            type: string
+        - name: module
+          in: query
+          schema:
+            type: string
+        - name: status
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 返回测试用例列表
+
+  /test/case:
+    post:
+      tags:
+        - 测试管理
+      summary: 新增测试用例
+      responses:
+        '200':
+          description: 新增成功
+
+  /test/case/dashboard:
+    get:
+      tags:
+        - 测试管理
+      summary: 测试仪表盘数据
+      responses:
+        '200':
+          description: 返回仪表盘统计
+
+  /test/case/{id}:
+    put:
+      tags:
+        - 测试管理
+      summary: 更新测试用例
+      responses:
+        '200':
+          description: 更新成功
+    delete:
+      tags:
+        - 测试管理
+      summary: 删除测试用例
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 删除成功

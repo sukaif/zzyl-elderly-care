@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzyl.nursing.mapper.FloorMapper">
+
+    <resultMap type="Floor" id="FloorResult">
+        <result property="id"        column="id" />
+        <result property="name"      column="name" />
+        <result property="sortOrder" column="sort_order" />
+        <result property="status"    column="status" />
+        <result property="remark"    column="remark" />
+        <result property="createTime"  column="create_time" />
+        <result property="updateTime"  column="update_time" />
+        <result property="createBy"    column="create_by" />
+        <result property="updateBy"    column="update_by" />
+    </resultMap>
+
+    <resultMap type="com.zzyl.nursing.domain.Room" id="RoomResult">
+        <result property="id"         column="id" />
+        <result property="floorId"    column="floor_id" />
+        <result property="roomNumber" column="room_number" />
+        <result property="sortOrder"  column="sort_order" />
+        <result property="status"     column="status" />
+        <result property="remark"     column="remark" />
+    </resultMap>
+
+    <resultMap type="com.zzyl.nursing.domain.Bed" id="BedResult">
+        <result property="id"        column="id" />
+        <result property="roomId"    column="room_id" />
+        <result property="bedNumber" column="bed_number" />
+        <result property="status"    column="status" />
+        <result property="price"     column="price" />
+        <result property="sortOrder" column="sort_order" />
+        <result property="remark"    column="remark" />
+    </resultMap>
+
+    <sql id="selectFloorVo">
+        select id, name, sort_order, status, remark, create_time, update_time, create_by, update_by
+        from floor
+    </sql>
+
+    <select id="selectFloorList" parameterType="Floor" resultMap="FloorResult">
+        <include refid="selectFloorVo"/>
+        <where>
+            <if test="name != null and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="status != null and status != ''"> and status = #{status}</if>
+        </where>
+        order by sort_order
+    </select>
+
+    <select id="selectAllEnableFloor" resultMap="FloorResult">
+        <include refid="selectFloorVo"/>
+        where status = '0'
+        order by sort_order
+    </select>
+
+    <select id="selectFloorById" parameterType="Long" resultMap="FloorResult">
+        <include refid="selectFloorVo"/>
+        where id = #{id}
+    </select>
+
+    <select id="selectRoomListByFloorId" parameterType="Long" resultMap="RoomResult">
+        select id, floor_id, room_number, sort_order, status, remark
+        from room
+        where floor_id = #{floorId}
+        order by sort_order
+    </select>
+
+    <select id="selectBedListByRoomId" resultMap="BedResult">
+        select id, room_id, bed_number, status, price, sort_order, remark
+        from bed
+        where room_id = #{roomId}
+        <if test="status != null and status != ''"> and status = #{status}</if>
+        order by sort_order
+    </select>
+
+    <insert id="insertFloor" parameterType="Floor" useGeneratedKeys="true" keyProperty="id">
+        insert into floor
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">name,</if>
+            <if test="sortOrder != null">sort_order,</if>
+            <if test="status != null">status,</if>
+            <if test="remark != null">remark,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="updateBy != null">update_by,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="sortOrder != null">#{sortOrder},</if>
+            <if test="status != null">#{status},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+        </trim>
+    </insert>
+
+    <update id="updateFloor" parameterType="Floor">
+        update floor
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="sortOrder != null">sort_order = #{sortOrder},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteFloorById" parameterType="Long">
+        delete from floor where id = #{id}
+    </delete>
+
+    <delete id="deleteFloorByIds" parameterType="String">
+        delete from floor where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

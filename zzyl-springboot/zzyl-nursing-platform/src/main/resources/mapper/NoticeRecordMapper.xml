@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzyl.nursing.mapper.NoticeRecordMapper">
+
+    <resultMap type="NoticeRecord" id="NoticeRecordResult">
+        <result property="id"                column="id" />
+        <result property="elderId"           column="elder_id" />
+        <result property="familyName"        column="family_name" />
+        <result property="communicationType" column="communication_type" />
+        <result property="communicationTime" column="communication_time" />
+        <result property="reason"            column="reason" />
+        <result property="result"            column="result" />
+        <result property="communicator"      column="communicator" />
+        <result property="remark"            column="remark" />
+        <result property="createTime"        column="create_time" />
+        <result property="updateTime"        column="update_time" />
+        <result property="createBy"          column="create_by" />
+        <result property="updateBy"          column="update_by" />
+    </resultMap>
+
+    <resultMap type="NoticeRecord" id="NoticeRecordListVoResult" extends="NoticeRecordResult">
+        <result property="elderName" column="elder_name" />
+    </resultMap>
+
+    <sql id="selectNoticeRecordVo">
+        select id, elder_id, family_name, communication_type,
+               communication_time, reason, result, communicator,
+               remark, create_time, update_time, create_by, update_by
+        from notice_record
+    </sql>
+
+    <select id="selectNoticeRecordList" parameterType="NoticeRecord" resultMap="NoticeRecordListVoResult">
+        select
+            nr.id, nr.elder_id, nr.family_name, nr.communication_type,
+            nr.communication_time, nr.reason, nr.result, nr.communicator,
+            e.name as elder_name
+        from notice_record nr
+        left join elder e on nr.elder_id = e.id
+        <where>
+            <if test="elderName != null and elderName != ''"> and e.name like concat('%', #{elderName}, '%')</if>
+            <if test="elderId != null"> and nr.elder_id = #{elderId}</if>
+        </where>
+        order by nr.communication_time desc
+    </select>
+
+    <select id="selectNoticeRecordById" parameterType="Long" resultMap="NoticeRecordListVoResult">
+        select
+            nr.id, nr.elder_id, nr.family_name, nr.communication_type,
+            nr.communication_time, nr.reason, nr.result, nr.communicator,
+            e.name as elder_name
+        from notice_record nr
+        left join elder e on nr.elder_id = e.id
+        where nr.id = #{id}
+    </select>
+
+    <insert id="insertNoticeRecord" parameterType="NoticeRecord" useGeneratedKeys="true" keyProperty="id">
+        insert into notice_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="elderId != null">elder_id,</if>
+            <if test="familyName != null">family_name,</if>
+            <if test="communicationType != null">communication_type,</if>
+            <if test="communicationTime != null">communication_time,</if>
+            <if test="reason != null">reason,</if>
+            <if test="result != null">result,</if>
+            <if test="communicator != null">communicator,</if>
+            <if test="remark != null">remark,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="updateBy != null">update_by,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="elderId != null">#{elderId},</if>
+            <if test="familyName != null">#{familyName},</if>
+            <if test="communicationType != null">#{communicationType},</if>
+            <if test="communicationTime != null">#{communicationTime},</if>
+            <if test="reason != null">#{reason},</if>
+            <if test="result != null">#{result},</if>
+            <if test="communicator != null">#{communicator},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+        </trim>
+    </insert>
+
+    <update id="updateNoticeRecord" parameterType="NoticeRecord">
+        update notice_record
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="elderId != null">elder_id = #{elderId},</if>
+            <if test="familyName != null">family_name = #{familyName},</if>
+            <if test="communicationType != null">communication_type = #{communicationType},</if>
+            <if test="communicationTime != null">communication_time = #{communicationTime},</if>
+            <if test="reason != null">reason = #{reason},</if>
+            <if test="result != null">result = #{result},</if>
+            <if test="communicator != null">communicator = #{communicator},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteNoticeRecordById" parameterType="Long">
+        delete from notice_record where id = #{id}
+    </delete>
+
+    <delete id="deleteNoticeRecordByIds" parameterType="String">
+        delete from notice_record where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

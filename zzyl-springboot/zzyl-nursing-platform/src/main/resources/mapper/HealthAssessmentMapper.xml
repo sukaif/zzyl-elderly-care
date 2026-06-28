@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzyl.nursing.mapper.HealthAssessmentMapper">
+
+    <resultMap type="HealthAssessment" id="HealthAssessmentResult">
+        <result property="id" column="id" />
+        <result property="elderId" column="elder_id" />
+        <result property="reportTitle" column="report_title" />
+        <result property="reportFile" column="report_file" />
+        <result property="assessmentResult" column="assessment_result" />
+        <result property="assessmentDate" column="assessment_date" />
+        <result property="healthScore" column="health_score" />
+        <result property="suggestAdmission" column="suggest_admission" />
+        <result property="recommendNursingLevel" column="recommend_nursing_level" />
+        <result property="admissionStatus" column="admission_status" />
+        <result property="examinationDate" column="examination_date" />
+        <result property="assessmentTime" column="assessment_time" />
+        <result property="status" column="status" />
+        <result property="createBy" column="create_by" />
+        <result property="createTime" column="create_time" />
+        <result property="updateBy" column="update_by" />
+        <result property="updateTime" column="update_time" />
+        <result property="remark" column="remark" />
+    </resultMap>
+
+    <resultMap id="HealthAssessmentVoResult" extends="HealthAssessmentResult" type="HealthAssessment">
+        <result property="elderName" column="elder_name" />
+        <result property="idCardNo" column="id_card_no" />
+    </resultMap>
+
+    <select id="selectHealthAssessmentList" parameterType="HealthAssessment" resultMap="HealthAssessmentVoResult">
+        select ha.*, e.name as elder_name, e.id_card_no
+        from health_assessment ha
+        left join elder e on ha.elder_id = e.id
+        <where>
+            <if test="elderName != null and elderName != ''"> and e.name like concat('%', #{elderName}, '%')</if>
+            <if test="idCardNo != null and idCardNo != ''"> and e.id_card_no = #{idCardNo}</if>
+            <if test="admissionStatus != null and admissionStatus != ''"> and ha.admission_status = #{admissionStatus}</if>
+            <if test="status != null and status != ''"> and ha.status = #{status}</if>
+        </where>
+        order by ha.create_time desc
+    </select>
+
+    <select id="selectHealthAssessmentById" parameterType="Long" resultMap="HealthAssessmentVoResult">
+        select ha.*, e.name as elder_name, e.id_card_no
+        from health_assessment ha
+        left join elder e on ha.elder_id = e.id
+        where ha.id = #{id}
+    </select>
+
+    <insert id="insertHealthAssessment" parameterType="HealthAssessment" useGeneratedKeys="true" keyProperty="id">
+        insert into health_assessment
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="elderId != null">elder_id,</if>
+            <if test="reportTitle != null">report_title,</if>
+            <if test="reportFile != null">report_file,</if>
+            <if test="assessmentResult != null">assessment_result,</if>
+            <if test="assessmentDate != null">assessment_date,</if>
+            <if test="healthScore != null">health_score,</if>
+            <if test="suggestAdmission != null">suggest_admission,</if>
+            <if test="recommendNursingLevel != null">recommend_nursing_level,</if>
+            <if test="admissionStatus != null">admission_status,</if>
+            <if test="examinationDate != null">examination_date,</if>
+            <if test="assessmentTime != null">assessment_time,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="remark != null">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="elderId != null">#{elderId},</if>
+            <if test="reportTitle != null">#{reportTitle},</if>
+            <if test="reportFile != null">#{reportFile},</if>
+            <if test="assessmentResult != null">#{assessmentResult},</if>
+            <if test="assessmentDate != null">#{assessmentDate},</if>
+            <if test="healthScore != null">#{healthScore},</if>
+            <if test="suggestAdmission != null">#{suggestAdmission},</if>
+            <if test="recommendNursingLevel != null">#{recommendNursingLevel},</if>
+            <if test="admissionStatus != null">#{admissionStatus},</if>
+            <if test="examinationDate != null">#{examinationDate},</if>
+            <if test="assessmentTime != null">#{assessmentTime},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="remark != null">#{remark},</if>
+        </trim>
+    </insert>
+
+    <update id="updateHealthAssessment" parameterType="HealthAssessment">
+        update health_assessment
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="reportTitle != null">report_title = #{reportTitle},</if>
+            <if test="reportFile != null">report_file = #{reportFile},</if>
+            <if test="assessmentResult != null">assessment_result = #{assessmentResult},</if>
+            <if test="healthScore != null">health_score = #{healthScore},</if>
+            <if test="suggestAdmission != null">suggest_admission = #{suggestAdmission},</if>
+            <if test="recommendNursingLevel != null">recommend_nursing_level = #{recommendNursingLevel},</if>
+            <if test="admissionStatus != null">admission_status = #{admissionStatus},</if>
+            <if test="examinationDate != null">examination_date = #{examinationDate},</if>
+            <if test="assessmentTime != null">assessment_time = #{assessmentTime},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteHealthAssessmentByIds" parameterType="String">
+        delete from health_assessment where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">#{id}</foreach>
+    </delete>
+</mapper>

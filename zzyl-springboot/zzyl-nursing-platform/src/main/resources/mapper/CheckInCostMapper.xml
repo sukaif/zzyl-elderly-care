@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzyl.nursing.mapper.CheckInCostMapper">
+
+    <resultMap type="CheckInCost" id="CheckInCostResult">
+        <result property="id"         column="id" />
+        <result property="checkInId"  column="check_in_id" />
+        <result property="bedId"      column="bed_id" />
+        <result property="nursingFee" column="nursing_fee" />
+        <result property="bedPrice"   column="bed_price" />
+        <result property="totalCost"  column="total_cost" />
+        <result property="prePay"     column="pre_pay" />
+        <result property="remark"     column="remark" />
+        <result property="createTime" column="create_time" />
+        <result property="updateTime" column="update_time" />
+        <result property="createBy"   column="create_by" />
+        <result property="updateBy"   column="update_by" />
+    </resultMap>
+
+    <sql id="selectCheckInCostVo">
+        select id, check_in_id, bed_id, nursing_fee, bed_price, total_cost, pre_pay,
+               remark, create_time, update_time, create_by, update_by
+        from check_in_cost
+    </sql>
+
+    <select id="selectCheckInCostList" parameterType="CheckInCost" resultMap="CheckInCostResult">
+        <include refid="selectCheckInCostVo"/>
+        <where>
+            <if test="checkInId != null"> and check_in_id = #{checkInId}</if>
+        </where>
+    </select>
+
+    <select id="selectCheckInCostById" parameterType="Long" resultMap="CheckInCostResult">
+        <include refid="selectCheckInCostVo"/>
+        where id = #{id}
+    </select>
+
+    <select id="selectCheckInCostByCheckInId" parameterType="Long" resultMap="CheckInCostResult">
+        <include refid="selectCheckInCostVo"/>
+        where check_in_id = #{checkInId}
+    </select>
+
+    <insert id="insertCheckInCost" parameterType="CheckInCost" useGeneratedKeys="true" keyProperty="id">
+        insert into check_in_cost
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="checkInId != null">check_in_id,</if>
+            <if test="bedId != null">bed_id,</if>
+            <if test="nursingFee != null">nursing_fee,</if>
+            <if test="bedPrice != null">bed_price,</if>
+            <if test="totalCost != null">total_cost,</if>
+            <if test="prePay != null">pre_pay,</if>
+            <if test="remark != null">remark,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="updateBy != null">update_by,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="checkInId != null">#{checkInId},</if>
+            <if test="bedId != null">#{bedId},</if>
+            <if test="nursingFee != null">#{nursingFee},</if>
+            <if test="bedPrice != null">#{bedPrice},</if>
+            <if test="totalCost != null">#{totalCost},</if>
+            <if test="prePay != null">#{prePay},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+        </trim>
+    </insert>
+
+    <update id="updateCheckInCost" parameterType="CheckInCost">
+        update check_in_cost
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="checkInId != null">check_in_id = #{checkInId},</if>
+            <if test="bedId != null">bed_id = #{bedId},</if>
+            <if test="nursingFee != null">nursing_fee = #{nursingFee},</if>
+            <if test="bedPrice != null">bed_price = #{bedPrice},</if>
+            <if test="totalCost != null">total_cost = #{totalCost},</if>
+            <if test="prePay != null">pre_pay = #{prePay},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCheckInCostById" parameterType="Long">
+        delete from check_in_cost where id = #{id}
+    </delete>
+
+    <delete id="deleteCheckInCostByIds" parameterType="String">
+        delete from check_in_cost where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

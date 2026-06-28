@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>com.zzyl</groupId>
+        <artifactId>zzyl</artifactId>
+        <version>3.9.2</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>zzyl-test-platform</artifactId>
+    <description>测试管理平台模块 - 测试用例、测试计划、测试报告管理</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.zzyl</groupId>
+            <artifactId>zzyl-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.zzyl</groupId>
+            <artifactId>zzyl-system</artifactId>
+        </dependency>
+    </dependencies>
+</project>

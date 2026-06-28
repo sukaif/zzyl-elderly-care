@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzyl.nursing.mapper.CheckInMapper">
+
+    <resultMap type="CheckIn" id="CheckInResult">
+        <result property="id"              column="id" />
+        <result property="elderId"         column="elder_id" />
+        <result property="nursingLevelId"  column="nursing_level_id" />
+        <result property="checkInDate"     column="check_in_date" />
+        <result property="status"          column="status" />
+        <result property="familyInfo"      column="family_info" />
+        <result property="bedId"           column="bed_id" />
+        <result property="deposit"         column="deposit" />
+        <result property="nursingFee"      column="nursing_fee" />
+        <result property="bedPrice"        column="bed_price" />
+        <result property="otherFee"        column="other_fee" />
+        <result property="medicalFee"      column="medical_fee" />
+        <result property="subsidy"         column="subsidy" />
+        <result property="feeDate"         column="fee_date" />
+        <result property="signDate"        column="sign_date" />
+        <result property="contractName"    column="contract_name" />
+        <result property="thirdPartyName"  column="third_party_name" />
+        <result property="thirdPartyPhone" column="third_party_phone" />
+        <result property="contractFile"    column="contract_file" />
+        <result property="startDate"       column="start_date" />
+        <result property="endDate"         column="end_date" />
+        <result property="remark"          column="remark" />
+        <result property="createTime"      column="create_time" />
+        <result property="updateTime"      column="update_time" />
+        <result property="createBy"        column="create_by" />
+        <result property="updateBy"        column="update_by" />
+    </resultMap>
+
+    <resultMap type="com.zzyl.nursing.domain.vo.CheckInListVo" id="CheckInListVoResult">
+        <result property="id"               column="id" />
+        <result property="elderId"          column="elder_id" />
+        <result property="elderName"        column="elder_name" />
+        <result property="age"              column="age" />
+        <result property="gender"           column="gender" />
+        <result property="idCardNo"         column="id_card_no" />
+        <result property="phone"            column="phone" />
+        <result property="nursingLevelName" column="nursing_level_name" />
+        <result property="status"           column="status" />
+        <result property="checkInDate"      column="check_in_date" />
+        <result property="bedNumber"        column="bed_number" />
+        <result property="createTime"       column="create_time" />
+    </resultMap>
+
+    <sql id="selectCheckInVo">
+        select id, elder_id, nursing_level_id, check_in_date, status, family_info,
+               remark, create_time, update_time, create_by, update_by
+        from check_in
+    </sql>
+
+    <select id="selectCheckInList" parameterType="CheckIn" resultMap="CheckInResult">
+        <include refid="selectCheckInVo"/>
+        <where>
+            <if test="elderId != null"> and elder_id = #{elderId}</if>
+            <if test="nursingLevelId != null"> and nursing_level_id = #{nursingLevelId}</if>
+            <if test="status != null and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+
+    <!-- 分页查询入住列表（关联老人表、护理等级表） -->
+    <select id="selectCheckInListVo" parameterType="CheckIn" resultMap="CheckInListVoResult">
+        select
+            ci.id,
+            ci.elder_id,
+            e.name as elder_name,
+            e.age,
+            e.gender,
+            e.id_card_no,
+            e.phone,
+            nl.name as nursing_level_name,
+            ci.status,
+            ci.check_in_date,
+            b.bed_number,
+            ci.create_time
+        from check_in ci
+        left join elder e on ci.elder_id = e.id
+        left join nursing_level nl on ci.nursing_level_id = nl.id
+        left join bed b on ci.bed_id = b.id
+        <where>
+            <if test="elderId != null"> and ci.elder_id = #{elderId}</if>
+            <if test="status != null and status != ''"> and ci.status = #{status}</if>
+            <if test="elderName != null and elderName != ''"> and e.name like concat('%', #{elderName}, '%')</if>
+            <if test="idNumber != null and idNumber != ''"> and e.id_card_no like concat('%', #{idNumber}, '%')</if>
+        </where>
+        order by ci.create_time desc
+    </select>
+
+    <select id="selectCheckInById" parameterType="Long" resultMap="CheckInResult">
+        <include refid="selectCheckInVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertCheckIn" parameterType="CheckIn" useGeneratedKeys="true" keyProperty="id">
+        insert into check_in
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="elderId != null">elder_id,</if>
+            <if test="nursingLevelId != null">nursing_level_id,</if>
+            <if test="checkInDate != null">check_in_date,</if>
+            <if test="status != null">status,</if>
+            <if test="familyInfo != null">family_info,</if>
+            <if test="bedId != null">bed_id,</if>
+            <if test="deposit != null">deposit,</if>
+            <if test="nursingFee != null">nursing_fee,</if>
+            <if test="bedPrice != null">bed_price,</if>
+            <if test="otherFee != null">other_fee,</if>
+            <if test="medicalFee != null">medical_fee,</if>
+            <if test="subsidy != null">subsidy,</if>
+            <if test="feeDate != null">fee_date,</if>
+            <if test="signDate != null">sign_date,</if>
+            <if test="contractName != null">contract_name,</if>
+            <if test="thirdPartyName != null">third_party_name,</if>
+            <if test="thirdPartyPhone != null">third_party_phone,</if>
+            <if test="contractFile != null">contract_file,</if>
+            <if test="startDate != null">start_date,</if>
+            <if test="endDate != null">end_date,</if>
+            <if test="remark != null">remark,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="updateBy != null">update_by,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="elderId != null">#{elderId},</if>
+            <if test="nursingLevelId != null">#{nursingLevelId},</if>
+            <if test="checkInDate != null">#{checkInDate},</if>
+            <if test="status != null">#{status},</if>
+            <if test="familyInfo != null">#{familyInfo},</if>
+            <if test="bedId != null">#{bedId},</if>
+            <if test="deposit != null">#{deposit},</if>
+            <if test="nursingFee != null">#{nursingFee},</if>
+            <if test="bedPrice != null">#{bedPrice},</if>
+            <if test="otherFee != null">#{otherFee},</if>
+            <if test="medicalFee != null">#{medicalFee},</if>
+            <if test="subsidy != null">#{subsidy},</if>
+            <if test="feeDate != null">#{feeDate},</if>
+            <if test="signDate != null">#{signDate},</if>
+            <if test="contractName != null">#{contractName},</if>
+            <if test="thirdPartyName != null">#{thirdPartyName},</if>
+            <if test="thirdPartyPhone != null">#{thirdPartyPhone},</if>
+            <if test="contractFile != null">#{contractFile},</if>
+            <if test="startDate != null">#{startDate},</if>
+            <if test="endDate != null">#{endDate},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+        </trim>
+    </insert>
+
+    <update id="updateCheckIn" parameterType="CheckIn">
+        update check_in
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="elderId != null">elder_id = #{elderId},</if>
+            <if test="nursingLevelId != null">nursing_level_id = #{nursingLevelId},</if>
+            <if test="checkInDate != null">check_in_date = #{checkInDate},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="familyInfo != null">family_info = #{familyInfo},</if>
+            <if test="bedId != null">bed_id = #{bedId},</if>
+            <if test="deposit != null">deposit = #{deposit},</if>
+            <if test="nursingFee != null">nursing_fee = #{nursingFee},</if>
+            <if test="bedPrice != null">bed_price = #{bedPrice},</if>
+            <if test="otherFee != null">other_fee = #{otherFee},</if>
+            <if test="medicalFee != null">medical_fee = #{medicalFee},</if>
+            <if test="subsidy != null">subsidy = #{subsidy},</if>
+            <if test="feeDate != null">fee_date = #{feeDate},</if>
+            <if test="signDate != null">sign_date = #{signDate},</if>
+            <if test="contractName != null">contract_name = #{contractName},</if>
+            <if test="thirdPartyName != null">third_party_name = #{thirdPartyName},</if>
+            <if test="thirdPartyPhone != null">third_party_phone = #{thirdPartyPhone},</if>
+            <if test="contractFile != null">contract_file = #{contractFile},</if>
+            <if test="startDate != null">start_date = #{startDate},</if>
+            <if test="endDate != null">end_date = #{endDate},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCheckInById" parameterType="Long">
+        delete from check_in where id = #{id}
+    </delete>
+
+    <delete id="deleteCheckInByIds" parameterType="String">
+        delete from check_in where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <!-- ========== 在住管理统计 ========== -->
+
+    <select id="countTotalBeds" resultType="int">
+        select count(*) from bed
+    </select>
+
+    <select id="countBedsByStatus" resultType="int">
+        select count(*) from bed where status = #{status}
+    </select>
+
+    <select id="countTodayCheckIn" resultType="int">
+        select count(*) from check_in
+        where date(check_in_date) = curdate() and status = '1'
+    </select>
+
+    <select id="countTodayCheckOut" resultType="int">
+        select count(*) from check_out
+        where date(checkout_date) = curdate()
+    </select>
+
+    <select id="countOnLeave" resultType="int">
+        select count(*) from leave_record
+        where status in ('0', '1')
+    </select>
+
+    <select id="countByNursingLevel" resultType="java.util.Map">
+        select
+            nl.name as name,
+            nl.id as levelId,
+            count(ci.id) as count
+        from nursing_level nl
+        left join check_in ci on ci.nursing_level_id = nl.id and ci.status = '1'
+        group by nl.id, nl.name
+        order by nl.id
+    </select>
+
+    <select id="countCheckInByDateRange" resultType="int">
+        select count(*) from check_in
+        where status = '1'
+        <if test="startDate != null and startDate != ''"> and check_in_date >= #{startDate}</if>
+        <if test="endDate != null and endDate != ''"> and check_in_date &lt;= #{endDate}</if>
+    </select>
+
+    <select id="countCheckOutByDateRange" resultType="int">
+        select count(*) from check_out
+        <where>
+            <if test="startDate != null and startDate != ''"> and checkout_date >= #{startDate}</if>
+            <if test="endDate != null and endDate != ''"> and checkout_date &lt;= #{endDate}</if>
+        </where>
+    </select>
+
+    <select id="countLeaveByDateRange" resultType="int">
+        select count(*) from leave_record
+        <where>
+            <if test="startDate != null and startDate != ''"> and start_time >= #{startDate}</if>
+            <if test="endDate != null and endDate != ''"> and start_time &lt;= #{endDate}</if>
+        </where>
+    </select>
+
+</mapper>
