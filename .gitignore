@@ -60,6 +60,11 @@ reports/*.html
 Thumbs.db
 
 # ===================
+# Generated documents
+# ===================
+*.docx
+
+# ===================
 # Project specific
 # ===================
 zzyl-springboot/logs/
